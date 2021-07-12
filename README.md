@@ -2,7 +2,7 @@
 
 ### Description
 XGBoost Book Recommender system using goodbooks-10k dataset (binary ratings ver.)  
-This recommender system provides the top 10 recommended books by the user. If recommender system doesn't have any information about the user, recommend 10 of the most popular books (books with high ratings).  
+This recommender system provides the top 10 recommended books by the user. If recommender system doesn't have any information about the user, recommend 10 of the most popular books (books with high ratings).
 
 
 ### Usage
