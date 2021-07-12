@@ -14,7 +14,7 @@ You should run .ipynb files under preprocessing folder before train.
 
 3. Run Train / Predict / Recommend  
 mode : train, predict, recommend  
-user_id : only recommend mode  
+user_id : user_id (only for recommend mode)  
 ~~~
 ./run.sh {mode} {user_id}
 ~~~
