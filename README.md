@@ -1,2 +1,24 @@
 # goodbooks-10k-recommender
-Book Recommender system using goodbooks-10k dataset
+
+### Description
+XGBoost Book Recommender system using goodbooks-10k dataset (binary ratings ver.)  
+
+### Files
+
+
+### Usage
+1. Download dataset  
+You can download dataset here : https://www.kaggle.com/zygmunt/goodbooks-10k
+
+2. Preprocessing  
+You should run .ipynb files under preprocessing folder before train.
+
+3. Run Train / Predict / Recommend  
+mode : train, predict, recommend  
+user_id : only recommend mode  
+~~~
+./run.sh {mode} {user_id}
+~~~
+- train : train xgboost model
+- predict : evaluate xgboost model performance(rmse, accuracy)
+- recommend : recommend top 10 books for user(user_id)
