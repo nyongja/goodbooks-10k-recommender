@@ -9,10 +9,7 @@ This recommender system provides the top 10 recommended books by the user. If re
 1. Download dataset  
 You can download dataset here : https://www.kaggle.com/zygmunt/goodbooks-10k
 
-2. Preprocessing  
-You should run .ipynb files under preprocessing folder before train.
-
-3. Run Train / Predict / Recommend  
+2. Run Train / Predict / Recommend  
 mode : train, predict, recommend  
 user_id : user_id (only for recommend mode)  
 ~~~
@@ -21,3 +18,7 @@ user_id : user_id (only for recommend mode)
 - train : train xgboost model
 - predict : evaluate xgboost model performance(rmse, accuracy)
 - recommend : recommend top 10 books for user(user_id)
+
+### Performance
+RMSE :  0.36416453186682807
+Accuray Score :  0.7875972342264477
