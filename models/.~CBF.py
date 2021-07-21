@@ -11,9 +11,7 @@ from sklearn.metrics import mean_squared_error
 import joblib
 import pickle
 
-import core.config as conf
-
-class XGBoost:
+class CBF :
     def __init__(self):
         self.dataset_path = conf.dataset_path
         self.model_path = conf.model_path
@@ -28,7 +26,7 @@ class XGBoost:
                 'colsample_bytree':0.35, 
                 'eval_metric':'logloss',
                 'objective':'binary:logistic',
-                #'tree_method':'gpu_hist',
+                'tree_method':'gpu_hist',
                 #'predictor': 'gpu_predictor',
                 'seed': 1,
             }
@@ -54,37 +52,17 @@ class XGBoost:
     def preprocessing(self, df, train) :
         book_df = pd.read_csv(self.dataset_path+'books.csv')
         df = pd.merge(book_df, df, how='right', on='book_id')
-        
         # user average rating
-        user_info = df['binary_rating'].groupby(df['user_id']).mean().to_frame()
-        user_info = user_info.reset_index()
-        user_info.columns = ["user_id", "user_mean_rating"]
-        df = pd.merge(df, user_info, how='left', on = 'user_id')
-        read_book_lst = df.groupby('user_id')['book_id'].apply(list)
-        user_info = pd.merge(user_info, read_book_lst, on='user_id')
-        user_info.to_csv(self.dataset_path +'user_info.csv', index = False)
-        del user_info
-        
-        '''
+        user_mean_rating = df['binary_rating'].groupby(df['user_id']).mean().to_frame()
+        user_mean_rating = user_mean_rating.reset_index()
+        user_mean_rating.columns = ["user_id", "user_mean_rating"]
+        df = pd.merge(df, user_mean_rating, how='left', on = 'user_id')
         # book average rating
-        book_rating = df[df['binary_rating'] == 1].groupby(df['book_id']).count()['binary_rating'].to_frame()
-        book_rating['total_no_rating'] = df[df['binary_rating'] == 0].groupby(df['book_id']).count()['binary_rating'].to_frame()
-        book_rating['aveage_rating'] = df['binary_rating'].groupby(df['book_id']).mean().to_frame()
-        book_rating.columns = ["total_rating", "total_no_rating", "total_average_rating"]
-        book_rating.to_csv(self.dataset_path +'book_ratings_info.csv')
-        df = pd.merge(df, book_rating, how = 'left', on = 'book_id')
-        del book_df, book_rating
-        
-        # authors info
-        authors_info = df['binary_rating'].groupby(df['authors']).mean().to_frame()
-        authors_info = authors_info.reset_index()
-        authors_info.columns = ["authors", "authors_mean_rating"]
-        authors_info.to_csv(self.dataset_path +'authors_info.csv', index = False)
-        df = pd.merge(df, authors_info, how = 'left', on = 'authors')
-        del authors_info
-        '''
-        
+        book_ratings = pd.read_csv(self.dataset_path + 'book_ratings_info.csv')
+        df = pd.merge(df, book_ratings, how = 'left', on = 'book_id')
         df = df.dropna()
+        del book_df, book_ratings
+        
         # language processing (One Hot Encoder)
         df = self.language_encoding(df, train)
 
@@ -149,7 +127,6 @@ class XGBoost:
         
         rec_df['user_id'] = int(user_id)
         user_info = pd.read_csv(self.dataset_path + 'user_info.csv')
-        #authors_info = pd.read_csv(self.dataset_path + 'authors_info.csv')
         
         if user_id not in user_info['user_id'].values : # top popular 10 books
             rec_top10 = self.popular_recommend()
@@ -160,9 +137,9 @@ class XGBoost:
 
             user_read_books = user_info[user_info['user_id'] == int(user_id)]['book_id']
             rec_df = rec_df.drop(rec_df[rec_df['book_id'].isin(user_read_books)].index)
-            #book_ratings = pd.read_csv(self.dataset_path + 'book_ratings_info.csv')
-            #rec_df = pd.merge(rec_df, book_ratings, on = 'book_id')
-            #rec_df = pd.merge(rec_df, authors_info, on = 'authors')
+            book_ratings = pd.read_csv(self.dataset_path + 'book_ratings_info.csv')
+            rec_df = pd.merge(rec_df, book_ratings, on = 'book_id')
+            
             rec_df = self.language_encoding(rec_df, False)
             
             rec_df = rec_df.dropna()
