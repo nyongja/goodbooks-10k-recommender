@@ -20,5 +20,5 @@ user_id : user_id (only for recommend mode)
 - recommend : recommend top 10 books for user(user_id)
 
 ### Performance
-RMSE :  0.36416453186682807
+RMSE :  0.36416453186682807  
 Accuray Score :  0.7875972342264477
