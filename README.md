@@ -2,8 +2,7 @@
 
 ### Description
 XGBoost Book Recommender system using goodbooks-10k dataset (binary ratings ver.)  
-
-### Files
+This recommender system provides the top 10 recommended books by the user. If recommender system doesn't have any information about the user, recommend 10 of the most popular books (books with high ratings).
 
 
 ### Usage
@@ -15,7 +14,7 @@ You should run .ipynb files under preprocessing folder before train.
 
 3. Run Train / Predict / Recommend  
 mode : train, predict, recommend  
-user_id : only recommend mode  
+user_id : user_id (only for recommend mode)  
 ~~~
 ./run.sh {mode} {user_id}
 ~~~
